@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Reset some default styles for email clients */
+      body,
+      p {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+      .container {
+        background-color: #e5efff;
+        margin: 10px;
+        padding: 10px;
+      }
+      .email-content {
+        max-width: 650px;
+        margin: 10px auto;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+      }
+      .header {
+        color: #0061fe;
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+      .message {
+        color: #38486e;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .otp-code {
+        background-color: #0061fe;
+        color: #ffffff;
+        font-size: 24px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+      .note {
+        color: #38486e;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .button-container {
+        margin: 30px 0;
+      }
+      .button {
+        background-color: #0061fe;
+        color: #ffffff !important;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: bold;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="email-content">
+        <img
+          src="https://res.cloudinary.com/dmx2xmhry/image/upload/v1694286881/logo_3_rmih4y.png"
+          alt="Company Logo"
+          width="150"
+          style="display: block; margin: 0 auto 20px"
+        />
+        <div class="header">Email Verification OTP</div>
+        <div class="message">
+          Welcome to Minerva Trusted Connections,
+          <br />
+          Here is your One-Time Password (OTP) for email verification:
+        </div>
+        <div class="otp-code"><b>[OTP]</b></div>
+        <div class="note">
+          Please use this OTP to verify your email address. It will expire in 10
+          minutes.
+        </div>
+
+        <div class="message">
+          If you did not request this OTP, please ignore this email.
+        </div>
+        <p style="text-align: center; font-size: 12px; color: #38486e">
+          OTP ID: [FULL_HASH]
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
