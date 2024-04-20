@@ -10,7 +10,6 @@ console.log("Cashfree", Cashfree);
 
 Cashfree.XClientId = process.env.CASHFREE_CLIENT_ID;
 Cashfree.XClientSecret = process.env.CASHFREE_SECRET;
-("");
 Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
 
 exports.createOrder = BigPromise(async (req, res, next) => {
