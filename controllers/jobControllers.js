@@ -285,9 +285,11 @@ exports.applyJob = BigPromise(async (req, res, next) => {
     job.jobLocation,
     `${req.headers.origin}/job/${job._id}`
   );
+  const hasPremium = req.user.premiumExpiry > Date.now();
 
   res.status(200).json({
     success: true,
+    premiumStatus: hasPremium,
     message: "Applied for job successfully",
     data: {
       candidateStatus: "NEW",

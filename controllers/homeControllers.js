@@ -6,7 +6,7 @@ const jobFilter = require("../utils/jobFilter");
 exports.home = BigPromise(async (req, res, next) => {
   res.status(200).json({
     success: true,
-    message: "Welcome to Minerva",
+    message: "Welcome to Minerva TC",
   });
 });
 

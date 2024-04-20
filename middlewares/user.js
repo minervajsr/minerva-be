@@ -4,19 +4,20 @@ const CustomError = require("../utils/customError");
 const jwt = require("jsonwebtoken");
 
 exports.isLoggedIn = BigPromise(async (req, res, next) => {
-  const token =
-    req.cookies.token || req.header("Authorization")?.replace("Bearer ", "");
+  try {
+    // console.log("I am in isLoggedIn middleware");
+    // console.log("req.headers", req.headers);
+    const token = req.headers.authorization.split(" ")[1];
+    console.log("auth_token", token);
 
-  // console.log("token", req.cookies);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded", decoded);
 
-  if (!token) {
+    req.user = await User.findById(decoded.id);
+
+    next();
+  } catch (error) {
+    console.log("error", error.message);
     return next(new CustomError("Please login to get access", 401));
   }
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  // console.log("decoded", decoded);
-
-  req.user = await User.findById(decoded.id);
-
-  next();
 });

@@ -1,5 +1,8 @@
 const User = require("../models/user");
+const Job = require("../models/jobs");
+const Company = require("../models/company");
 const OTPModel = require("../models/OTPModel");
+const Payment = require("../models/payment");
 
 const BigPromise = require("../middlewares/bigPromise");
 const CustomError = require("../utils/customError");
@@ -241,12 +244,58 @@ exports.passwordReset = BigPromise(async (req, res, next) => {
 });
 
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  console.log("user", user, req.user._id);
+  console.log("Get logged in user details");
+  let user = await User.findById(req.user._id);
+  // console.log("user", user, req.user._id);
+
+  // Find jobs applied by the user
+
+  if (!user) {
+    return next(new CustomError("No user found", 404));
+  }
+
+  let jobsApplied = await Job.find({
+    "jobApplications.candidateId": req.user._id,
+  });
+
+  const jobsApplications = await Promise.all(
+    jobsApplied.map(async (job) => {
+      const jobCompany = await Company.findById(job.jobCompany).select(
+        "companyName"
+      );
+      const jobApplication = job.jobApplications.filter(
+        (app) => app.candidateId.toString() == req.user._id
+      )[0];
+
+      return {
+        jobId: job._id,
+        jobTitle: job.jobTitle,
+        jobLocation: job.jobLocation,
+        jobAppliedOn: jobApplication.jobAppliedOn,
+        jobCompany: jobCompany,
+        jobApplicationStatus: jobApplication.candidateStatus,
+      };
+    })
+  );
+
+  // console.log("data", jobsApplications);
+
+  const paymentHistoryData = await Promise.all(
+    user.paymentHistory.map((payment) => {
+      console.log("payment", payment._id);
+      return Payment.findById(payment._id);
+    })
+  );
+
+  console.log("paymentHistoryData", paymentHistoryData);
 
   res.status(200).json({
     status: true,
-    data: user,
+    data: {
+      ...user._doc,
+      jobApplications: jobsApplications,
+      paymentHistoryData: paymentHistoryData,
+    },
   });
 });
 
@@ -267,12 +316,14 @@ exports.getLoggedInUserResume = BigPromise(async (req, res, next) => {
 });
 
 exports.changePassword = BigPromise(async (req, res, next) => {
-  const userId = req.body.id;
+  const userId = req.body.userId;
   const user = await User.findById(userId).select("+password");
 
   const isCorrectOldPassword = await user.isValidatedPassword(
-    req.body.oldPassword
+    req.body.currentPassword
   );
+
+  console.log("isValidatedPassword", isCorrectOldPassword);
 
   if (!isCorrectOldPassword) {
     return next(new CustomError("Old password is incorrect", 400));
@@ -326,7 +377,7 @@ exports.uploadResume = BigPromise(async (req, res, next) => {
   if (!user) {
     return next(new CustomError("User not found", 404));
   }
-  console.log("req.file", req.files.resume);
+  console.log("req.file", req.files);
   if (!req.files.resume) {
     return next(new CustomError("Please upload a file", 400));
   }

@@ -29,8 +29,15 @@ router.route("/email-verification").post(emailVerification);
 router.route("/email-verification/verify").post(verifyEmailOTP);
 router.route("/user").get(isLoggedIn, getLoggedInUserDetails);
 router.route("/user/resume").get(isLoggedIn, getLoggedInUserResume);
-router.route("/password/update").post(changePassword);
+router.route("/user/password-update").post(changePassword);
 router.route("/user/update").post(isLoggedIn, updateUserDetails);
+router.route("/user/check-token").get(isLoggedIn, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Token is valid",
+    user: req.user,
+  });
+});
 
 //Upload Resume
 router.route("/user/upload-resume").post(isLoggedIn, uploadResume);

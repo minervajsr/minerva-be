@@ -15,10 +15,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please add an email"],
     trim: true,
     unique: true,
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please add a valid email",
-    ],
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please add a valid email"],
   },
   mobile: {
     countryCode: String,
@@ -26,7 +23,6 @@ const userSchema = new mongoose.Schema({
     phone: {
       type: String,
       maxlength: [10, "Phone number cannot be more than 10 characters"],
-      minlength: [10, "Phone number cannot be less than 10 characters"],
     },
   },
   userType: {
@@ -55,7 +51,6 @@ const userSchema = new mongoose.Schema({
       default: 0,
     },
   },
-
   userConnections: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -74,6 +69,21 @@ const userSchema = new mongoose.Schema({
     minlength: [8, "A user password must have more or equal then 8 characters"],
     select: false,
   },
+  isPremiumActivated: {
+    type: Boolean,
+    default: false,
+  },
+  premiumExpiry: {
+    type: Date,
+    default: null,
+  },
+
+  paymentHistory: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    },
+  ],
 });
 
 //Encrypting password before saving

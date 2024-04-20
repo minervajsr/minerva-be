@@ -11,7 +11,6 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add a job description"],
     trim: true,
-    maxlength: [500, "Job description cannot be more than 500 characters"],
   },
   jobSkills: {
     type: [String],
@@ -52,6 +51,10 @@ const jobSchema = new mongoose.Schema({
   },
   jobApplications: [
     {
+      jobAppliedOn: {
+        type: Date,
+        default: Date.now,
+      },
       candidateId: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
