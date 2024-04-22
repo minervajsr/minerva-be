@@ -16,6 +16,7 @@ const {
   linkedinLogin,
   emailVerification,
   verifyEmailOTP,
+  updateUserSkills,
 } = require("../controllers/userControllers");
 
 const { isLoggedIn } = require("../middlewares/user");
@@ -31,6 +32,7 @@ router.route("/user").get(isLoggedIn, getLoggedInUserDetails);
 router.route("/user/resume").get(isLoggedIn, getLoggedInUserResume);
 router.route("/user/password-update").post(changePassword);
 router.route("/user/update").post(isLoggedIn, updateUserDetails);
+router.route("/user/update-skills").post(updateUserSkills);
 router.route("/user/check-token").get(isLoggedIn, (req, res) => {
   res.status(200).json({
     success: true,

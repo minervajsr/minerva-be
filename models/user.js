@@ -25,6 +25,20 @@ const userSchema = new mongoose.Schema({
       maxlength: [10, "Phone number cannot be more than 10 characters"],
     },
   },
+  dob: {
+    date: {
+      type: String,
+      default: 0,
+    },
+    month: {
+      type: String,
+      default: 0,
+    },
+    year: {
+      type: String,
+      default: 0,
+    },
+  },
   userType: {
     type: String,
     enum: ["USER", "COMPANY", "ADMIN"],

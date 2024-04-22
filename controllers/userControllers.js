@@ -19,7 +19,7 @@ const {
 } = require("../utils/email");
 
 exports.signup = BigPromise(async (req, res, next) => {
-  const { name, email, password, userType } = req.body;
+  const { name, email, password, userType, userSkills } = req.body;
 
   if (!name || !email || !password) {
     throw new CustomError("Please provide all the required fields", 400);
@@ -30,6 +30,7 @@ exports.signup = BigPromise(async (req, res, next) => {
     email,
     password,
     userType,
+    userSkills,
   });
 
   cookieToken(user, res);
@@ -342,11 +343,13 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     userType: req.body.userType,
+    dob: req.body.dob,
     mobile: {
       countryCode: req.body?.mobile?.countryCode,
       phone: req.body?.mobile?.phone,
     },
     userSkills: req.body.userSkills,
+    userResume: req.body.userResume,
   };
 
   console.log("newData", newData);
@@ -496,4 +499,23 @@ exports.verifyEmailOTP = BigPromise(async (req, res, next) => {
     await OTPModel.deleteOne({ email, otp });
     res.status(400).json({ message: "Invalid OTP." });
   }
+});
+
+exports.updateUserSkills = BigPromise(async (req, res, next) => {
+  const { userSkills } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { userSkills },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
